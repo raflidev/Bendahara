@@ -1,6 +1,10 @@
 <?php
 require "koneksi.php";
 
+if(!isset($_GET['grup'])){
+    header("location:grup.php?modul=$_GET[modul]");
+}
+
 if(isset($_POST['submit'])){
     $modul = $_GET['modul'];
     $member = $_POST['member'];

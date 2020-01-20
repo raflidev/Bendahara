@@ -30,7 +30,7 @@ body{
 	height: 100%;
 	max-width:400px;
 	margin:0 auto;
-	padding:20px 5% 60px;		
+	padding:20px 5% 60px;
 }
 h1 span{
 	font-size: 16px!important;
@@ -75,8 +75,9 @@ input, select{
 }
 
 #list{
-	position: absolute;
-	bottom: 10px;
+	position: fixed;
+	bottom: 0;
+	color: #383c4a;
 }
 .icon {
 	height: 48px;
@@ -85,4 +86,21 @@ input, select{
 
 #list span{
 	margin-right: 80px;
+}
+#list span:hover{
+	color: #fff;
+}
+
+.hover{
+	color: #fff;
+}
+
+#list span:nth-child(3){
+	margin-right: 0;
+}
+#list{
+	background: #4b5162;
+	padding: 5px 0;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
 }

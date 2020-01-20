@@ -1,8 +1,5 @@
 <?php
 require "koneksi.php";
-
-
-
 // menampilkan semua modul
 $sql = "select * from modul";
 $query = mysqli_query($koneksi, $sql);
@@ -19,78 +16,113 @@ $query = mysqli_query($koneksi, $sql);
 </head>
 
 <body>
-    <p>Uang Bendahara!</p>
-    <?php
-    // menampilkan semua total bendahara
-    $sql = "select SUM(total_tagihan) from transaksi";
-    $query = mysqli_query($koneksi,$sql);
-    $row = mysqli_fetch_array($query);    
-    ?>
-    <h1>
-        <span>Rp.</span>
-        <?php
-        if($row[0] == null){
-            echo 0;
-        }else{
-            echo $row[0];
-        }
-        ?>
-    </h1>
-    <div id="content">
+    <div id="body-content">
 
-        
-        <p>Modulmu <a id="all" class="line" onclick="allmodul()">All</a><a id='riwayat' onclick="riwayat()">History</a></p>
-        <!-- mendapatkan id grup & innerjoin table transaksi ke table modul ke table grup-->
+
+        <p>Uang Bendahara!</p>
         <?php
-        
+        // menampilkan semua total bendahara
+        $sql = "select SUM(total_tagihan) from transaksi";
+        $query = mysqli_query($koneksi,$sql);
+        $row = mysqli_fetch_array($query);    
         ?>
-        <div id="container">
+        <h1>
+            <span>Rp.</span>
             <?php
-            $sql = "SELECT modul.id_grup,modul.nama_modul,SUM(transaksi.total_tagihan),modul.id_modul FROM modul left join transaksi on modul.id_modul = transaksi.id_modul GROUP by modul.id_modul";
-            $query = mysqli_query($koneksi,$sql);
-            if(mysqli_num_rows($query) < 1){?>
-                <div class="boxes">
-                    <p>Modul belum dibuat</p>
-                </div>
-                
-            <?php }
-            while($row = mysqli_fetch_array($query)) { ?>
-            <a href="bayar.php?grup=<?=$row[0]?>&modul=<?= $row[3] ?>">
-                    <div class="boxes">
-                        <p><?= $row[1] ?></p>        
-                        Rp. <?php
-                        if($row[2] == NULL){
-                        echo 0;
-                        }else{
-                            echo $row[2];
-                        }
-                            ?>
-                        
-                    </div>
-            </a>
-            
-            <?php
+            if($row[0] == null){
+                echo 0;
+            }else{
+                echo $row[0];
             }
             ?>
-            <br>
-            <a href="modul.php" class="button">Tambah</a>
+        </h1>
+        <div id="content">
         </div>
+
+        <div class="box-footer">
+            <div id="list">
+                <span id="moduling"><i onclick="moduling()" class="icon" data-feather="dollar-sign"></i></span>    
+                <span id="adding"><i onclick="adding()" class="icon" data-feather="plus-circle"></i></span>    
+                <span id="member"><i onclick="member()" class="icon" data-feather="user"></i></span>    
+            </div>
+        </div> 
     </div>
-    <div class="box-footer">
-        <div id="list">
-            <span id="moduling"><i onclick="modulling()" class="icon" data-feather="dollar-sign"></i></span>    
-            <span id="adding"><i onclick="adding()" class="icon" data-feather="plus-circle"></i></span>    
-            <span id="member"><i onclick="member()" class="icon" data-feather="user"></i></span>    
-        </div>
-    </div> 
         <footer>
         Rafli Ramadhan - &copy; 2019
     </footer>
     <script src="js/feather.min.js"></script>
     <script>
+
         feather.replace();
 
+        document.getElementById('moduling').classList.add('hover');
+
+        function contentindex(){
+            document.getElementById('content').innerHTML = `
+            <p>Modulmu <a id="all" class="line" onclick="allmodul()">All</a><a id='riwayat' onclick="riwayat()">History</a></p>
+
+            <div id="container">
+                <?php
+                $sql = "SELECT modul.id_grup,modul.nama_modul,SUM(transaksi.total_tagihan),modul.id_modul FROM modul left join transaksi on modul.id_modul = transaksi.id_modul GROUP by modul.id_modul";
+                $query = mysqli_query($koneksi,$sql);
+                if(mysqli_num_rows($query) < 1){?>
+                    <div class="boxes">
+                        <p>Modul belum dibuat</p>
+                    </div>
+                    
+                <?php }
+                while($row = mysqli_fetch_array($query)) { 
+                    if($row[0] == !NULL){
+                        echo "<a href='bayar.php?grup=$row[0]&modul=$row[3]'>";
+                    }else{
+                        echo "<a href='bayar.php?modul=$row[3]'>";
+                    }
+                    ?>
+                
+                        <div class="boxes">
+                            <p>
+                            <?php echo $row[1];
+                            if($row[0] == NULL){
+                                echo " (belum ada grup)";
+                            }
+                            ?> </p>        
+                            Rp. <?php
+                            if($row[2] == NULL){
+                            echo 0;
+                            }else{
+                                echo $row[2];
+                            }
+                                ?>
+                            
+                        </div>
+                </a>
+                
+                <?php
+                }
+                ?>
+                <br>
+                <a href="modul.php" class="button">Tambah</a>
+            </div>
+            `;
+        }
+        contentindex();
+        function moduling(){
+            document.getElementById('member').classList.remove('hover');
+            document.getElementById('moduling').classList.add('hover');
+            contentindex();
+        }
+
+        function adding(){
+            document.getElementById('body-content').innerHTML = `
+            <?php
+            include 'grup.php';
+            ?>
+            `;
+        }
+
         function member(){
+            document.getElementById('moduling').classList.remove('hover');
+            document.getElementById('member').classList.add('hover');
             document.getElementById('content').innerHTML = 
             `
             <p>Grup</p>
@@ -157,35 +189,7 @@ $query = mysqli_query($koneksi, $sql);
             document.getElementById('riwayat').classList.remove('line');
             document.getElementById('all').classList.add('line');
 
-            document.getElementById('container').innerHTML = `
-            <?php
-               $sql = "SELECT modul.id_grup,modul.nama_modul,SUM(transaksi.total_tagihan),modul.id_modul FROM modul left join transaksi on modul.id_modul = transaksi.id_modul GROUP by modul.id_modul";
-                $query = mysqli_query($koneksi,$sql);
-                if(mysqli_num_rows($query) < 1){?>
-                    <div class="boxes">
-                        <p>Modul belum dibuat</p>
-                    </div>
-                    
-                <?php }
-                while($row = mysqli_fetch_array($query)) { ?>
-                <a href="bayar.php?grup=<?=$row[0]?>&modul=<?= $row[3] ?>">
-                        <div class="boxes">
-                            <p><?= $row[1] ?></p>        
-                            Rp. <?php
-                            if($row[2] == NULL){
-                            echo 0;
-                            }else{
-                                echo $row[2];
-                            }
-                    ?>
-                
-            </div>
-    </a>
-    
-    <?php
-    }
-    ?>
-            `;
+            contentindex();
         }
     </script>
 </body>

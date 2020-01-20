@@ -16,7 +16,7 @@ if(isset($_POST['submit']) && !isset($_POST['grup'])){
     $waktu = $_POST['waktu'];
     $tagihan = $_POST['tagihan'];
 
-    $sql = "insert into modul (id_modul,nama_modul,waktu,tagihan) values('',$nama,$waktu,$tagihan)";
+    $sql = "INSERT into modul (id_modul,nama_modul,waktu,tagihan) values(NULL,'$nama','$waktu',$tagihan)";
     mysqli_query($koneksi, $sql);
     if(true){
         $sql = "select id_modul from modul order by id_modul  DESC";

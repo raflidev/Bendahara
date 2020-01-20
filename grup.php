@@ -2,10 +2,26 @@
 require "koneksi.php";
 if(isset($_POST['submit'])){
     $nama = $_POST['nama'];
-    $sql = "insert into grup values('',$nama)";
+    $sql = "INSERT into grup values(NULL,'$nama')";
     mysqli_query($koneksi,$sql);
     if(true){
-        header('location: member.php');
+        //mengambil id grup terbaru
+        $sql = "SELECT id_grup from grup order by id_grup DESC LIMIT 1";
+        $query = mysqli_query($koneksi, $sql);
+        $row = mysqli_fetch_array($query);
+
+        if(isset($_GET['modul'])){
+            $modul =  $_GET['modul'];
+            $sql = "UPDATE modul set id_grup=$row[0] where id_modul=$modul";
+            mysqli_query($koneksi,$sql);
+            if(true){
+                header("location: member.php?grup=$row[0]");        
+            }else{
+                echo "update gagal";
+            }
+        }
+        
+        header("location: member.php?grup=$row[0]");
     }
 }
 ?>
@@ -36,10 +52,6 @@ if(isset($_POST['submit'])){
         Rafli Ramadhan - &copy; 2019
     </footer>
 
-    <script>
-        function lanjut(){
-
-        }
-    </script>
+   
 </body>
 </html>
