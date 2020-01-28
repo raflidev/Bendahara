@@ -37,6 +37,7 @@ if(isset($_POST['submit'])){
 </head>
 
 <body>
+<u><a href="index.php">< Home</a></u>
 <p>Tambah Grup</p>
 <div id="content">
     <form action="" method="post">

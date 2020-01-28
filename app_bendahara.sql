@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2020 at 03:07 PM
+-- Generation Time: Jan 28, 2020 at 04:39 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -28,6 +28,8 @@ DELIMITER $$
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hapus_grup` (IN `idgrup` INT)  DELETE FROM grup where grup.id_grup = idgrup$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `laporan_pengeluaran` (IN `modul` INT)  select transaksi.total_tagihan,pengeluaran.deskripsi from transaksi inner join pengeluaran on transaksi.id_pengeluaran = pengeluaran.id_pengeluaran where transaksi.id_modul = modul$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tambah_grup` (IN `nama` VARCHAR(30))  INSERT INTO grup VALUES("",nama)$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tampil_transaksi_member` (IN `idmember` INT)  select modul.nama_modul,grup.nama_grup,member.nama_member, transaksi.total_tagihan from transaksi,modul,member,grup where member.id_member = transaksi.id_member and modul.id_modul = transaksi.id_modul and grup.id_grup = modul.id_grup and member.id_member= idmember$$
@@ -50,20 +52,7 @@ CREATE TABLE `grup` (
 --
 
 INSERT INTO `grup` (`id_grup`, `nama_grup`) VALUES
-(1, 'RPL 2'),
-(3, 'Ibu2 RT 6'),
-(4, 'Anak RT 6'),
-(6, 'hell'),
-(7, 'hell'),
-(8, '123'),
-(9, '123'),
-(10, '1'),
-(11, '221'),
-(12, 'jujuy'),
-(13, 'asd11'),
-(14, 'yayan'),
-(15, 'baguz'),
-(16, 'RPL 3');
+(25, 'RPL 3');
 
 --
 -- Triggers `grup`
@@ -125,7 +114,56 @@ INSERT INTO `log_aktifitas` (`kejadian`, `waktu`) VALUES
 ('grup ditambah', '2020-01-20 14:34:56'),
 ('transaksi ditambah', '2020-01-20 14:37:23'),
 ('grup ditambah', '2020-01-20 15:32:05'),
-('transaksi ditambah', '2020-01-20 15:32:59');
+('transaksi ditambah', '2020-01-20 15:32:59'),
+('grup ditambah', '2020-01-28 10:07:55'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:24'),
+('grup dihapus', '2020-01-28 10:08:30'),
+('grup dihapus', '2020-01-28 10:08:30'),
+('grup dihapus', '2020-01-28 10:08:30'),
+('grup dihapus', '2020-01-28 10:11:21'),
+('grup ditambah', '2020-01-28 10:12:00'),
+('grup dihapus', '2020-01-28 10:12:24'),
+('grup diubah', '2020-01-28 11:18:50'),
+('grup ditambah', '2020-01-28 11:19:58'),
+('grup dihapus', '2020-01-28 11:20:34'),
+('grup ditambah', '2020-01-28 11:21:44'),
+('grup dihapus', '2020-01-28 11:22:13'),
+('grup ditambah', '2020-01-28 11:35:30'),
+('grup dihapus', '2020-01-28 11:35:50'),
+('transaksi ditambah', '2020-01-28 11:37:37'),
+('transaksi ditambah', '2020-01-28 11:52:07'),
+('transaksi ditambah', '2020-01-28 12:08:06'),
+('grup ditambah', '2020-01-28 12:08:50'),
+('transaksi ditambah', '2020-01-28 12:09:45'),
+('grup ditambah', '2020-01-28 18:53:17'),
+('transaksi ditambah', '2020-01-28 19:18:57'),
+('grup ditambah', '2020-01-28 20:26:14'),
+('grup dihapus', '2020-01-28 21:09:11'),
+('grup dihapus', '2020-01-28 21:09:42'),
+('grup dihapus', '2020-01-28 21:10:19'),
+('grup dihapus', '2020-01-28 21:10:25'),
+('grup dihapus', '2020-01-28 21:10:30'),
+('grup ditambah', '2020-01-28 21:14:11'),
+('transaksi ditambah', '2020-01-28 21:15:13'),
+('transaksi ditambah', '2020-01-28 21:15:18'),
+('transaksi ditambah', '2020-01-28 21:15:23'),
+('transaksi ditambah', '2020-01-28 21:15:30'),
+('grup dihapus', '2020-01-28 21:30:58'),
+('grup dihapus', '2020-01-28 21:33:31'),
+('transaksi ditambah', '2020-01-28 21:34:00'),
+('grup ditambah', '2020-01-28 21:34:09'),
+('grup dihapus', '2020-01-28 21:34:14'),
+('grup ditambah', '2020-01-28 21:34:23'),
+('grup dihapus', '2020-01-28 21:34:44'),
+('transaksi ditambah', '2020-01-28 21:39:34'),
+('transaksi ditambah', '2020-01-28 22:12:47'),
+('transaksi ditambah', '2020-01-28 22:19:05');
 
 -- --------------------------------------------------------
 
@@ -144,31 +182,11 @@ CREATE TABLE `member` (
 --
 
 INSERT INTO `member` (`id_member`, `id_grup`, `nama_member`) VALUES
-(1, 1, 'Naufal'),
-(2, 1, 'Sujudi'),
-(3, 1, 'Rendy'),
-(4, 1, 'Ibnu'),
-(5, 1, 'Reynaldi'),
-(6, 3, 'bu Eka'),
-(7, 3, 'bu Soleh'),
-(8, 3, 'Bu Ali'),
-(9, 4, 'Raka'),
-(10, 4, 'Gilang'),
-(11, 4, 'Rofi'),
-(12, 4, 'Fajar'),
-(13, 1, 'Endang'),
-(14, 1, 'Juan'),
-(15, 13, 'asd'),
-(16, 14, 'dodo'),
-(17, 14, 'embem'),
-(18, 14, 'yanti'),
-(19, 15, 'yaya'),
-(20, 15, 'mimi'),
-(21, 15, 'lulu'),
-(22, 15, 'nunu'),
-(23, 16, 'Aldi'),
-(24, 16, 'Rafli'),
-(25, 16, 'Tegar');
+(38, 25, 'Sujudi'),
+(39, 25, 'Rafli'),
+(40, 25, 'Rendy'),
+(41, 25, 'Aldi'),
+(42, 25, 'Ibnu');
 
 -- --------------------------------------------------------
 
@@ -189,10 +207,8 @@ CREATE TABLE `modul` (
 --
 
 INSERT INTO `modul` (`id_modul`, `nama_modul`, `id_grup`, `waktu`, `tagihan`) VALUES
-(1, 'Kas Kelas', 1, 'Mingguan', 2000),
-(2, 'Arisan', 3, 'MIngguan', 5000),
-(3, 'Trip Gunung', 4, 'Harian', 2000),
-(8, 'Uang Kegiatan', 16, 'Mingguan', 10000);
+(16, 'Uang Kegiatan', 25, 'Mingguan', 10000),
+(18, 'Kas Kelas', 25, 'Harian', 2000);
 
 -- --------------------------------------------------------
 
@@ -202,7 +218,6 @@ INSERT INTO `modul` (`id_modul`, `nama_modul`, `id_grup`, `waktu`, `tagihan`) VA
 
 CREATE TABLE `pengeluaran` (
   `id_pengeluaran` int(11) NOT NULL,
-  `nominal` int(11) NOT NULL,
   `deskripsi` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -210,10 +225,11 @@ CREATE TABLE `pengeluaran` (
 -- Dumping data for table `pengeluaran`
 --
 
-INSERT INTO `pengeluaran` (`id_pengeluaran`, `nominal`, `deskripsi`) VALUES
-(1, 0, ''),
-(2, 0, ''),
-(3, 0, '');
+INSERT INTO `pengeluaran` (`id_pengeluaran`, `deskripsi`) VALUES
+(1, ''),
+(2, ''),
+(3, ''),
+(8, 'foto copy');
 
 -- --------------------------------------------------------
 
@@ -236,9 +252,9 @@ CREATE TABLE `tampil_transaksi` (
 
 CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
-  `id_modul` int(11) NOT NULL,
-  `id_member` int(11) NOT NULL,
-  `total_tagihan` int(11) NOT NULL,
+  `id_modul` int(11) DEFAULT NULL,
+  `id_member` int(11) DEFAULT NULL,
+  `total_tagihan` int(11) DEFAULT NULL,
   `id_pengeluaran` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -247,16 +263,13 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id_transaksi`, `id_modul`, `id_member`, `total_tagihan`, `id_pengeluaran`) VALUES
-(1, 2, 8, 5000, 1),
-(2, 1, 2, 2000, 2),
-(3, 3, 9, 2000, 3),
-(4, 1, 1, 3000, NULL),
-(5, 1, 1, 3000, NULL),
-(6, 1, 1, 2000, NULL),
-(7, 1, 3, 2000, NULL),
-(8, 3, 10, 2000, NULL),
-(9, 1, 14, 2000, NULL),
-(12, 8, 23, 10000, NULL);
+(18, 16, 39, 10000, NULL),
+(19, 16, 38, 10000, NULL),
+(20, 16, 40, 10000, NULL),
+(21, 16, 41, 10000, NULL),
+(22, 18, 38, 2000, NULL),
+(23, 16, 38, 10000, NULL),
+(25, 16, NULL, -10000, 8);
 
 --
 -- Triggers `transaksi`
@@ -342,31 +355,31 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `grup`
 --
 ALTER TABLE `grup`
-  MODIFY `id_grup` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_grup` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `member`
 --
 ALTER TABLE `member`
-  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `modul`
 --
 ALTER TABLE `modul`
-  MODIFY `id_modul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_modul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
@@ -389,8 +402,7 @@ ALTER TABLE `modul`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_pengeluaran`) REFERENCES `pengeluaran` (`id_pengeluaran`),
-  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_modul`) REFERENCES `modul` (`id_modul`),
-  ADD CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`id_member`) REFERENCES `member` (`id_member`);
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_modul`) REFERENCES `modul` (`id_modul`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

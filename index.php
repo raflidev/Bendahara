@@ -136,7 +136,7 @@ $query = mysqli_query($koneksi, $sql);
             $query = mysqli_query($koneksi,$sql);
             if(mysqli_num_rows($query) < 1){?>
                 <div class="boxes">
-                    <p>Modul belum dibuat</p>
+                    <p>Grup belum dibuat</p>
                 </div>
                 
             <?php }
@@ -159,7 +159,7 @@ $query = mysqli_query($koneksi, $sql);
             }
             ?>
             <br>
-            <a href="modul.php" class="button">Tambah</a>
+            <a href="grup.php" class="button">Tambah</a>
         </div>
             `;
         }

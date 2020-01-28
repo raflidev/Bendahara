@@ -23,6 +23,35 @@ if(isset($_POST['submit'])){
         alert('pembayaran gagal');
     }
 }
+
+if(isset($_POST['hapus'])){
+    $sql = "DELETE from transaksi WHERE id_modul=$_GET[modul]";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        $sql = "DELETE from modul WHERE id_modul=$_GET[modul]";
+        mysqli_query($koneksi,$sql);
+        if(true){
+            header("location:index.php");
+        }
+    }  
+}
+
+if(isset($_POST['debit'])){
+    $nom = -$_POST['nominal'];
+    $sql = "INSERT into pengeluaran values (NULL,'$_POST[deskripsi]')";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        $sql = "SELECT id_pengeluaran from pengeluaran order by id_pengeluaran DESC";
+        $query = mysqli_query($koneksi,$sql);       
+        $row = mysqli_fetch_array($query); 
+
+        $sqltrans = "INSERT into transaksi values (NULL,$_GET[modul],NULL,$nom,$row[id_pengeluaran])";
+        mysqli_query($koneksi,$sqltrans);        
+        if(true){
+            header("location:index.php");
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,31 +73,86 @@ if(isset($_POST['submit'])){
         $query = mysqli_query($koneksi,$sql);
         $row = mysqli_fetch_array($query);    
     ?>
-    <p>Pembayaran <?= $row['nama_modul']  ?> - <?= $row['nama_grup'] ?></p>
+    <u><a href="index.php">< Home</a></u>
+    <p><?= $row['nama_modul']  ?> - <?= $row['nama_grup'] ?></p>
     
 
 
     <div id="container">
-    <form action="" method="post">
-
-        <label>Nama Member</label>
-        <select name="member" id="">
-            <?php
-    $sql = "select * from member where id_grup=$id";
-    $query = mysqli_query($koneksi,$sql);
-    while($row = mysqli_fetch_array($query)){ ?>
-            <option value="<?= $row[0] ?>"><?= $row[2] ?></option>
-            <?php } ?>
-    </select>
-    <label>Bayar Berapa kali?</label>
-    <input type="number" name="bayar">
-</div>
-<br>
-<input type="submit" name='submit' class="button" value="Tambah">
-</form>
+    
     <footer>
         Rafli Ramadhan - &copy; 2019
     </footer>
+    <script>
+    function contentIndex(){
+        document.getElementById('container').innerHTML = `
+        <form action="" method="post">
+
+        <label>Nama Member</label>
+        <select name="member" id="">
+        <option>...</option>
+            <?php
+            $sql = "select * from member where id_grup=$id";
+            $query = mysqli_query($koneksi,$sql);
+            while($row = mysqli_fetch_array($query)){ ?>
+                    <option value="<?= $row[0] ?>"><?= $row[2] ?></option>
+                    <?php } ?>
+            </select>
+            <label>Bayar Berapa kali?</label>
+            <input type="number" name="bayar">
+            <br>
+            <input type="submit" name='submit' class="button" value="Tambah">
+            <a onclick="pengeluaran()" class="button">Pengeluaran</a>
+            <a onclick="detail()" class="button">Detail Pengeluaran</a>
+            <input type="submit" name='hapus' onclick="confirm('Hapus semua transaksi pada modul?')" class="button" value="Hapus Modul">
+            </form>
+        </div>
+        `;
+    }
+
+    function pengeluaran(){
+        document.getElementById('container').innerHTML = `
+        <form action="" method="post">
+
+
+            <label>Nominal</label>
+            <input type="number" name="nominal">
+            <label>Deskripsi</label>
+            <input type="text" name="deskripsi">
+            <br>
+
+            <input type="submit" name='debit' class="button" value="Simpan Pengeluaran">
+            <a onclick="contentIndex()" class="button">Kembali</a>            
+            </form>
+        </div>
+        `;
+    }
+
+    function detail(){
+        document.getElementById('container').innerHTML = `
+            <?php
+            $sql = "CALL laporan_pengeluaran($_GET[modul])";
+            $query = mysqli_query($koneksi,$sql);
+            if(mysqli_num_rows($query) < 1){?>
+                <div class="boxes">
+                    <p>Pengeluaran kosong</p>
+                </div>
+                
+            <?php }
+            while($row = mysqli_fetch_array($query)){?>
+                 <div class="boxes">
+                            <p>
+                            <?= $row[1] ?>
+                            </p>        
+                            Rp. <?= $row[0] ?>                                                            
+                        </div>
+           <?php } ?>
+            <a onclick="contentIndex()" class="button">Kembali</a>            
+        </div>
+        `;
+    }
+    contentIndex();
+    </script>
 </body>
 
 </html>

@@ -9,6 +9,10 @@ if(isset($_POST['submit']) && isset($_POST['grup'])){
 
     $sql = "INSERT INTO modul VALUES (NULL, '$nama', $grup, '$waktu', $tagihan)";
     mysqli_query($koneksi, $sql);
+
+    if(true){
+        header("location:index.php");
+    }
 }
 
 if(isset($_POST['submit']) && !isset($_POST['grup'])){
@@ -38,6 +42,7 @@ if(isset($_POST['submit']) && !isset($_POST['grup'])){
 </head>
 
 <body>
+<u><a href="index.php">< Home</a></u>
 <p>Tambah Modul</p>
 <div id="content">
     <form action="" method="post">
@@ -65,6 +70,7 @@ if(isset($_POST['submit']) && !isset($_POST['grup'])){
         `
         <label>Nama Grup</label>
         <select name="grup">
+        <option>...</option>
         <?php
         $sql = "select * from grup";
         $query= mysqli_query($koneksi,$sql);

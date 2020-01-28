@@ -40,6 +40,9 @@ h1 span{
     padding: 0;
 }
 .boxes,.button{
+	font-size: 16px;
+	font-family: "Montserrat";	
+	color:#fff;
 	background-color: #4b5162;
 	display: flex;
 	justify-content: space-between;
@@ -54,6 +57,7 @@ footer{
 	bottom: 0;
 	left:0;
 }
+
 .button{
     justify-content: center;
 }
@@ -103,4 +107,10 @@ input, select{
 	padding: 5px 0;
 	border-top-left-radius: 20px;
 	border-top-right-radius: 20px;
+}
+input{
+	margin-top: 5px;
+	box-sizing: none!important;
+	border-width: none!important;
+	border-style: none!important;
 }

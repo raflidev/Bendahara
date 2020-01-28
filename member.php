@@ -1,5 +1,26 @@
 <?php
 require "koneksi.php";
+
+if(isset($_GET['grup'])&&isset($_GET['hapus'])){
+    $sql = "delete from member where id_member=$_GET[hapus] and id_grup=$_GET[grup]";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        header("location:member.php?grup=$_GET[grup]");
+    }
+}
+
+if(isset($_GET['id'])){
+    $sql = "delete from member where id_grup = $_GET[id]";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        $sql = "delete from grup where id_grup = $_GET[id]";
+        mysqli_query($koneksi,$sql);
+        if(true){
+            header("location:index.php");
+        }
+    }
+    
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,14 +41,13 @@ require "koneksi.php";
         $query = mysqli_query($koneksi,$sql);
         $row = mysqli_fetch_array($query);    
     ?>
+    <u><a href="index.php">< Home</a></u>
     <p>Tambah Member - <?= $row['nama_grup'] ?></p>
     
 
 
     <div id="container">
-    
-   
-</div>
+    </div>
 </form>
     <footer>
         Rafli Ramadhan - &copy; 2019
@@ -36,20 +56,20 @@ require "koneksi.php";
         function kembali(){
             document.getElementById('container').innerHTML=`
                 <input onclick="contentindex()" type="submit" value="Tambah Member" class='button'>
+                <a onclick="confirm('Jika grup dihapus, semua member akan hilang? yakin?')" href="member.php?grup=<?=$_GET['grup']?>&id=<?=$_GET['grup']?>"  type="submit" class='button'>Hapus Grup</a>
                 <?php
                 $sql = "select * from member where id_grup=$_GET[grup]";
                 $query = mysqli_query($koneksi,$sql);
                 if(mysqli_num_rows($query) < 1){?>
                     <div class="boxes">
-                        <p>Modul belum dibuat</p>
+                        <p>Member kosong</p>
                     </div>
                     
                 <?php }
                 while($row = mysqli_fetch_array($query)) { ?>
                         <div class="boxes">
-                            <p><?= $row['nama_member'] ?></p>                        
+                            <p><?= $row['nama_member'] ?></p><a href="member.php?grup=<?=$_GET['grup']?>&hapus=<?= $row['id_member'] ?>">Hapus</a>
                         </div>
-                </a>
                 
                 <?php
                 }
@@ -66,9 +86,7 @@ require "koneksi.php";
                 $sql = "INSERT INTO member values (NULL,$id,'$nama')";
                 mysqli_query($koneksi,$sql);
                 if(true){
-                    echo "berhasil ditambahkan";
-                }else{
-                    echo "ga";
+                    header("location:member.php?grup=$_GET[grup]");
                 }
             }
         ?>
@@ -79,7 +97,7 @@ require "koneksi.php";
         
     <br>
     <input type="submit" id="submit" name='submit' class="button" value="Tambah">
-    <input type="submit" onclick="kembali()" class="button" value="Kembali">
+    <input type="submit" class="button" value="Kembali">
             `;
         }
 
