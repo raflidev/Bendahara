@@ -52,6 +52,14 @@ if(isset($_POST['debit'])){
         }
     }
 }
+
+if(isset($_POST['ganti'])){
+    $sql = "update modul set nama_modul = '$_POST[nama]' where id_modul = $_GET[modul]";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        header("location:index.php");
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +92,7 @@ if(isset($_POST['debit'])){
         Rafli Ramadhan - &copy; 2019
     </footer>
     <script>
+    contentIndex();
     function contentIndex(){
         document.getElementById('container').innerHTML = `
         <form action="" method="post">
@@ -104,6 +113,7 @@ if(isset($_POST['debit'])){
             <input type="submit" name='submit' class="button" value="Tambah">
             <a onclick="pengeluaran()" class="button">Pengeluaran</a>
             <a onclick="detail()" class="button">Detail Pengeluaran</a>
+            <a onclick="gantiNama()" class="button">Ganti Nama Modul</a>
             <input type="submit" name='hapus' onclick="confirm('Hapus semua transaksi pada modul?')" class="button" value="Hapus Modul">
             </form>
         </div>
@@ -112,6 +122,8 @@ if(isset($_POST['debit'])){
 
     function pengeluaran(){
         document.getElementById('container').innerHTML = `
+
+     
         <form action="" method="post">
 
 
@@ -151,7 +163,17 @@ if(isset($_POST['debit'])){
         </div>
         `;
     }
-    contentIndex();
+    function gantiNama(){
+        document.getElementById('container').innerHTML = `
+         <form method="post">
+            <label>Ganti Nama</label>
+            <input name="nama" type="text" >
+            <input name="ganti" class="button" type="submit" value="Simpan Perubahan">
+            <a onclick="contentIndex()" class="button">Kembali</a>       
+         </form>
+        `;
+    }
+    
     </script>
 </body>
 
