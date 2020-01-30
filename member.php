@@ -1,6 +1,16 @@
 <?php
 require "koneksi.php";
 
+    if(isset($_POST['tambah'])){
+           $nama = $_POST['nama'];
+            $id = $_GET['grup'];
+            $sql = "INSERT INTO member values (NULL,$id,'$nama')";
+            mysqli_query($koneksi,$sql);
+            if(true){
+                header("location:member.php?grup=$_GET[grup]");
+            }
+        }
+
 if(isset($_GET['grup'])&&isset($_GET['hapus'])){
     $sql = "delete from member where id_member=$_GET[hapus] and id_grup=$_GET[grup]";
     mysqli_query($koneksi,$sql);
@@ -13,13 +23,30 @@ if(isset($_GET['id'])){
     $sql = "delete from member where id_grup = $_GET[id]";
     mysqli_query($koneksi,$sql);
     if(true){
-        $sql = "delete from grup where id_grup = $_GET[id]";
-        mysqli_query($koneksi,$sql);
-        if(true){
-            header("location:index.php");
+                $sql = "select * from modul where id_grup=$_GET[id]";
+                $query = mysqli_query($koneksi,$sql);
+                while($row = mysqli_fetch_array($query)){
+                mysqli_query($koneksi,"delete from transaksi where id_modul=$row[id_modul]");
+                if(true){
+                $sql = "delete from modul where id_grup = $_GET[id]";
+                mysqli_query($koneksi,$sql);           
+                if(true){
+                $sql = "delete from grup where id_grup = $_GET[id]";
+                mysqli_query($koneksi,$sql);
+                if(true)          
+                    header("location:index.php");
+                }
+            }
         }
+    }   
+}
+
+if(isset($_POST['ganti'])){
+    $sql = "update grup set nama_grup='$_POST[nama]' where id_grup='$_GET[grup]'";
+    mysqli_query($koneksi,$sql);
+    if(true){
+        header("location:index.php");
     }
-    
 }
 ?>
 <!DOCTYPE html>
@@ -56,7 +83,8 @@ if(isset($_GET['id'])){
         function kembali(){
             document.getElementById('container').innerHTML=`
                 <input onclick="contentindex()" type="submit" value="Tambah Member" class='button'>
-                <a onclick="confirm('Jika grup dihapus, semua member akan hilang? yakin?')" href="member.php?grup=<?=$_GET['grup']?>&id=<?=$_GET['grup']?>"  type="submit" class='button'>Hapus Grup</a>
+                <input onclick="contentchange()" type="submit" value="Ganti Nama Grup" class='button'>
+                <a href="member.php?grup=<?=$_GET['grup']?>&id=<?=$_GET['grup']?>"  type="submit" class='button'>Hapus Grup</a>
                 <?php
                 $sql = "select * from member where id_grup=$_GET[grup]";
                 $query = mysqli_query($koneksi,$sql);
@@ -79,25 +107,41 @@ if(isset($_GET['id'])){
         kembali();
         function contentindex(){
             document.getElementById('container').innerHTML=`
-            <?php
-        if(isset($_POST['submit'])){
-                $nama = $_POST['nama'];
-                $id = $_GET['grup'];
-                $sql = "INSERT INTO member values (NULL,$id,'$nama')";
-                mysqli_query($koneksi,$sql);
-                if(true){
-                    header("location:member.php?grup=$_GET[grup]");
-                }
-            }
-        ?>
+            
         <form action="" method="post">
 
             <label>Nama Member</label>
             <input type="text" name="nama" id="">
         
     <br>
-    <input type="submit" id="submit" name='submit' class="button" value="Tambah">
+    <input type="submit" id="submit" name='tambah' class="button" value="Tambah">
     <input type="submit" class="button" value="Kembali">
+            `;
+        }
+
+        
+        function contentchange(){
+            document.getElementById('container').innerHTML=`
+            <?php
+            if(isset($_POST['submit'])){
+                    $nama = $_POST['nama'];
+                    $id = $_GET['grup'];
+                    $sql = "INSERT INTO member values (NULL,$id,'$nama')";
+                    mysqli_query($koneksi,$sql);
+                    if(true){
+                        header("location:member.php?grup=$_GET[grup]");
+                    }
+                }
+
+            ?>
+            <form action="" method="post">
+
+                <label>Nama grup</label>
+                <input type="text" name="nama" id="">
+            
+                <br>
+                <input type="submit" id="submit" name='ganti' class="button" value="Tambah">
+                <input type="submit" class="button" value="Kembali">
             `;
         }
 

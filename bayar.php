@@ -114,7 +114,7 @@ if(isset($_POST['ganti'])){
             <a onclick="pengeluaran()" class="button">Pengeluaran</a>
             <a onclick="detail()" class="button">Detail Pengeluaran</a>
             <a onclick="gantiNama()" class="button">Ganti Nama Modul</a>
-            <input type="submit" name='hapus' onclick="confirm('Hapus semua transaksi pada modul?')" class="button" value="Hapus Modul">
+            <input type="submit" name='hapus' class="button" value="Hapus Modul">
             </form>
         </div>
         `;
